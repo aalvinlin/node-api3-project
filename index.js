@@ -14,9 +14,17 @@ server.use(helmet());
 server.use("/api/posts", postRouter);
 server.use("/api/users", userRouter);
 
-server.get("/", (req, res) => {
+server.get("/", logger, (req, res) => {
     res.send("<h1>User and Post API</h1>");
 })
+
+function logger(req, res, next) {
+
+    let currentTime = new Date();
+    console.log( req.method, req.originalUrl, "at", currentTime.toLocaleTimeString());
+
+    next();
+}
 
 const port = 5000;
 server.listen(port, () => {
