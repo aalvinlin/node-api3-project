@@ -1,20 +1,29 @@
 const express = require('express');
+const database = require("./postDb");
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
+  database.get()
+    .then(response => {
+      console.log("database response:", response);
+      res.status(200).json(response);
+    })
+    .catch (error => {
+      console.log("database error:", error)
+      res.status(500).json({ message: "database error: GET /" });
+    })
+});
+
+router.get('/:id', validatePostId, (req, res) => {
   // do your magic!
 });
 
-router.get('/:id', (req, res) => {
+router.delete('/:id', validatePostId, (req, res) => {
   // do your magic!
 });
 
-router.delete('/:id', (req, res) => {
-  // do your magic!
-});
-
-router.put('/:id', (req, res) => {
+router.put('/:id', validatePostId, (req, res) => {
   // do your magic!
 });
 
