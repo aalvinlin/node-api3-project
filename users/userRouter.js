@@ -15,7 +15,7 @@ router.post('/', validateUser, (req, res) => {
     })
 });
 
-router.post('/:id/posts', validateUserId, (req, res) => {
+router.post('/:id/posts', validateUserId, validatePost, (req, res) => {
   // do your magic!
 });
 
@@ -38,7 +38,15 @@ router.get('/:id', validateUserId, (req, res) => {
 });
 
 router.get('/:id/posts', validateUserId, (req, res) => {
-  // do your magic!
+  database.getUserPosts(req.user.id)
+    .then(response => {
+      console.log("user posts retrieved:", response);
+      res.status(200).json(response);
+    })
+    .catch (error => {
+      console.log("database error:", error)
+      res.status(500).json({ message: "couldn't get user posts" });
+    })
 });
 
 router.delete('/:id', validateUserId, (req, res) => {
