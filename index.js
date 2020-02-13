@@ -14,8 +14,10 @@ server.use(helmet());
 server.use("/api/posts", logger, postRouter);
 server.use("/api/users", logger, userRouter);
 
+const secret = process.env.SECRET || "";
+
 server.get("/", logger, (req, res) => {
-    res.send("<h1>User and Post API</h1>");
+    res.send(`<h1>User and Post API${secret}</h1>`);
 })
 
 function logger(req, res, next) {
@@ -26,7 +28,7 @@ function logger(req, res, next) {
     next();
 }
 
-const port = 5000;
+const port = process.env.PORT || 5000;
 server.listen(port, () => {
     console.log("\r\n Server running on http://localhost:" + port + "\r\n");
 })
