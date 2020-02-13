@@ -15,9 +15,10 @@ router.post('/', validateUser, (req, res) => {
     })
 });
 
-router.post('/:id/posts', validateUserId, validatePost, (req, res) => {
-  // do your magic!
-});
+// handled in postRouter instead
+// router.post('/:id/posts', validateUserId, validatePost, (req, res) => {
+//   // do your magic!
+// });
 
 router.get('/', (req, res) => {
   database.get()
