@@ -3,8 +3,16 @@ const database = require("./userDb");
 
 const router = express.Router();
 
-router.post('/', validateUserId, (req, res) => {
-  // do your magic!
+router.post('/', validateUser, (req, res) => {
+  database.insert(req.body)
+    .then(response => {
+      console.log("added user:", response);
+      res.status(201).json(response);
+    })
+    .catch (error => {
+      console.log("database error:", error)
+      res.status(500).json({ message: "couldn't add user" });
+    })
 });
 
 router.post('/:id/posts', validateUserId, (req, res) => {
@@ -34,11 +42,27 @@ router.get('/:id/posts', validateUserId, (req, res) => {
 });
 
 router.delete('/:id', validateUserId, (req, res) => {
-  // do your magic!
+  database.remove(req.user.id)
+  .then(response => {
+    console.log("Post with ID ", req.user, "removed:", response);
+    res.status(200).json(response);
+  })
+  .catch (error => {
+    console.log("database error:", error)
+    console.log("Couldn't remove post with ID", req.user, ".", error);
+  })
 });
 
 router.put('/:id', validateUserId, (req, res) => {
-  // do your magic!
+  database.update(req.user.id, req.body)
+  .then(response => {
+    console.log("Post with ID ", req.user, "updated:", response);
+    res.status(200).json(response);
+  })
+  .catch (error => {
+    console.log("database error:", error)
+    console.log("Couldn't update post with ID", req.user, ".", error);
+  })
 });
 
 //custom middleware
