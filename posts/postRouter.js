@@ -16,7 +16,9 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', validatePostId, (req, res) => {
-  // do your magic!
+
+  res.status(200).json(req.response);
+
 });
 
 router.delete('/:id', validatePostId, (req, res) => {
@@ -30,15 +32,26 @@ router.put('/:id', validatePostId, (req, res) => {
 // custom middleware
 
 function validatePostId(req, res, next) {
-  let postId = req.body.id;
+  
+  let id = req.params.id;
 
-  if (getById(postId).length !== 0)
-    {
-      req.post = postId;
-      next();
-    }
-  else
-    { res.status(400).json({ message: "invalid post id" }); }
+  database.getById(id)
+    .then(response => {
+
+      if (!response)
+        { res.status(400).json({ message: "invalid post id" }); }
+
+      else
+        {
+          req.response = response;
+          next();
+        }
+    })
+    .catch (error => {
+      console.log("database error:", error);
+      res.status(500).json({message: "database error: GET /:id"});
+    })
+
 }
 
 module.exports = router;
