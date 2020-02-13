@@ -22,11 +22,27 @@ router.get('/:id', validatePostId, (req, res) => {
 });
 
 router.delete('/:id', validatePostId, (req, res) => {
-  // do your magic!
+  database.remove(req.response.id)
+  .then(response => {
+    console.log("Post with ID ", req.response, "removed:", response);
+    res.status(200).json(response);
+  })
+  .catch (error => {
+    console.log("database error:", error)
+    console.log("Couldn't remove post with ID", req.response, ".", error);
+  })
 });
 
 router.put('/:id', validatePostId, (req, res) => {
-  // do your magic!
+  database.update(req.response.id, req.body)
+  .then(response => {
+    console.log("Post with ID ", req.response, "updated:", response);
+    res.status(200).json(response);
+  })
+  .catch (error => {
+    console.log("database error:", error)
+    console.log("Couldn't update post with ID", req.response, ".", error);
+  })
 });
 
 // custom middleware
